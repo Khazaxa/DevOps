@@ -1,10 +1,11 @@
-FROM python:3.11-slim
+FROM python:3.14.0a2-alpine3.21
 
 WORKDIR /app
+COPY requirements.txt
 
-COPY . /app
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install --no-cache-dir flask
+COPY . .
 
 EXPOSE 5000
 
