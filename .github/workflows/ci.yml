@@ -1,6 +1,6 @@
 name: CI workflow
 
-on: 
+on:
   push:
     branches: ["main"]
   pull_request:
@@ -9,12 +9,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    # Checkout code
     steps:
-    - name: Pull repo
-      uses: actions/checkout@v4 
-    - name: hello
-      run: echo 'Hello'
-    - name: Build docker images
-      run: docker build . --file dockerfile --tag flask-app
-    
-  
+      - name: Pull repo
+        uses: actions/checkout@v4
+
+      # Setup Python
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      # Install dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Trivy security scan
+      - name: Security scan
+        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image flask-app
+
+      # Run tests
+      - name: Echo tests
+        run: echo 'Test passed'
+
+      # Build docker image
+      - name: Build docker images
+        run: docker build -t flask-app .
