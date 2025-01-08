@@ -25,10 +25,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # Trivy security scan
-      - name: Security scan
-        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image flask-app
-
       # Run tests
       - name: Echo tests
         run: echo 'Test passed'
@@ -36,3 +32,7 @@ jobs:
       # Build docker image
       - name: Build docker images
         run: docker build -t flask-app .
+
+      # Trivy security scan
+      - name: Security scan
+        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image flask-app
